@@ -517,7 +517,7 @@ void FE_Normalitzacio(void *pvParameters)
                                 buf_ham[n] = Ham_window[n] * FE_Zs.punter_dades[n];
                         }
                         float RMS = calculateRMS(buf_ham);
-                        float mean = calculateMEAN(buf_ham); // perquè RMS es sqrt de la mitjana, i volem la mitjana
+                        float mean = calculateMEAN(buf_ham); 
                         float MAV = calculateMAV(buf_ham);
                         float WL = calculateWL(buf_ham);
                         float SSC = calculSSC(buf_ham, threshold);
@@ -670,7 +670,6 @@ void Control_Motors(void *pvParameters)
 
         Control_Motors_t Con_Mot;
 
-        // --- CONFIG MCPWM (igual que tú) ---
         mcpwm_timer_handle_t timer = NULL;
         mcpwm_timer_config_t timer_config = {
             .group_id = 0,
@@ -721,16 +720,16 @@ void Control_Motors(void *pvParameters)
         ESP_ERROR_CHECK(mcpwm_timer_enable(timer));
         ESP_ERROR_CHECK(mcpwm_timer_start_stop(timer, MCPWM_TIMER_START_NO_STOP));
 
-        // --- LOOP PRINCIPAL ---
+       
         while (1)
         {
-                // Bloqueo eficiente (no consume CPU)
+               
                 if (xQueueReceive(GlobalQueue4, &Con_Mot, portMAX_DELAY) == pdTRUE)
                 {
-                        // Guardar muestra
+                       
                         resultat_SVM[idx++] = Con_Mot.resposta;
 
-                        // Cuando tenemos 4 → procesamos
+                        
                         if (idx == 4)
                         {
                                 idx = 0;
@@ -740,8 +739,6 @@ void Control_Motors(void *pvParameters)
                                     (resultat_SVM[1] * 100) +
                                     (resultat_SVM[2] * 10) +
                                     (resultat_SVM[3]);
-
-                                //printf("estat_actual = %lu\n", estat_actual);
 
                                 switch (estat_actual)
                                 {
@@ -785,8 +782,7 @@ void Control_Motors(void *pvParameters)
                                                 }
 
                                                 bloqueig_per_zero = true;
-
-                                                // Delay controlado (no bloquea sistema crítico)
+                
                                                 vTaskDelay(pdMS_TO_TICKS(300));
                                         }
                                         break;
@@ -815,10 +811,9 @@ void ADC_Init(adc_channel_t *channels, uint8_t numChannels)
         ESP_ERROR_CHECK(adc_continuous_new_handle(&handle_config, &adc_handle));
 
         adc_continuous_config_t adc_config = {
-            .pattern_num = numChannels, // Nº od ADC Channels
-            //.adc_pattern =,
+            .pattern_num = numChannels, 
             .sample_freq_hz = 60 * 1000,
-            .conv_mode = ADC_CONV_SINGLE_UNIT_1, // Interleaves between ADC1 and ADC2 to maximize sampling speed.
+            .conv_mode = ADC_CONV_SINGLE_UNIT_1, 
             .format = ADC_DIGI_OUTPUT_FORMAT_TYPE2,
         };
 
@@ -834,7 +829,7 @@ void ADC_Init(adc_channel_t *channels, uint8_t numChannels)
         ESP_ERROR_CHECK(adc_continuous_config(adc_handle, &adc_config));
 
         adc_continuous_evt_cbs_t cb_config = {
-            .on_conv_done = callback, // When the conversion frame is genereted we call the callback function
+            .on_conv_done = callback, 
         };
         ESP_ERROR_CHECK(adc_continuous_register_event_callbacks(adc_handle, &cb_config, NULL));
 }
