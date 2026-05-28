@@ -90,57 +90,6 @@ struct Mu_Sigma MS_WLD = {2717.4, 3207};
 struct Mu_Sigma MS_SSC = {140.6682, 25.2682};
 struct Mu_Sigma MS_MCR = {51.097, 18.7757};
 
-/*
-void convolucio(double senyal[48000])
-{
-
-        double senyal_EMG_filtrada[48000];
-        int i, j, k;
-        double tmp;
-
-        printf("OK4");
-
-        for (k = 0; k < 48000; k++)
-        {
-                tmp = 0;
-                for (i = 0; i < 251; i++) // for (i = 0; i <= k && i < 251; i++) COM A FUTURA MILLORA
-                {
-                        j = k - i;
-                        if (j >= 0)
-                        {
-                                tmp += senyal[j] * Coeficients_FIR[i];
-                        }
-                }
-                senyal_EMG_filtrada[k] = tmp;
-        }
-
-        printf("OK5\n");
-
-        FILE *file_2;
-
-        file_2 = fopen("Dades_Senyal_Captura14_Roger_Exterior_Filtrat.txt", "w");
-
-        if (file_2 == NULL)
-        {
-                printf("ERROR OBERTURA");
-                return;
-        }
-        printf("OK22\n");
-        for (int r = 0; r < 48000; r++)
-        {
-                if (fprintf(file_2, "%d,%lf\n", r, senyal_EMG_filtrada[r]) < 0)
-                {
-                        printf("ERROR AQUI\n");
-                        return;
-                }
-        }
-        fclose(file_2);
-
-        printf("OK6\n");
-
-        return;
-}*/
-
 void initializeBuffer(CircularBuffer *cb)
 {
         cb->write_index = 0;
@@ -191,22 +140,6 @@ float ProcessatFIR(CircularBuffer *cb, float senyal_EMG)
         return FIR_rec;
 }
 
-/*        if (!isFULL(cb))
-        {
-                // EXPLICACIÓ PER EL PRIMER CAS
-
-                // Guardem la primera mostra al buffer circular quan el write_index = 0.
-
-                // Fem la convolució, multiplicant la mostra per els 251 coeficients
-        }
-        else
-        {
-                printf("Buffer PLE");
-        }
-        // FIR_rec = fabs(FIR); // Rectifiquem el senyal.
-        // return FIR_rec;
-}*/
-
 float calculateRMS(float dades_RMS[])
 {
         float sum_squares = 0.0;
@@ -226,7 +159,7 @@ float calculateMEAN(float dades_MEAN[])
                 sum_squares += dades_MEAN[i]; // Square
         }
         float mean_squares = sum_squares / 450; // Mean
-        return (mean_squares);               // Root
+        return (mean_squares);               
 }
 
 float calculateMAV(float dades_MAV[])
@@ -235,7 +168,6 @@ float calculateMAV(float dades_MAV[])
 
         for (int i = 0; i < 450; i++)
         {
-                // Use fabs() for absolute value of doubles, abs() for integers
                 sum += fabs(dades_MAV[i]);
         }
 
@@ -248,7 +180,6 @@ float calculateWL(float dades_WL[])
 
         for (int i = 1; i < 450; i++)
         {
-                // Use fabs() for absolute value of doubles, abs() for integers
                 sum += fabs((dades_WL[i]) - dades_WL[i - 1]);
         }
 
@@ -262,7 +193,6 @@ float calculSSC(float dades_SSC[], float threshold)
 
         for (int i = 1; i < 450; i++)
         {
-                // Use fabs() for absolute value of doubles, abs() for integers
                 slope[i] = ((dades_SSC[i]) - dades_SSC[i - 1]);
         }
         for (int r = 1; r < 449; r++)
