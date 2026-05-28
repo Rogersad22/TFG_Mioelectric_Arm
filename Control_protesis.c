@@ -47,7 +47,7 @@ float bias[NUM_CLASSES] = {
 adc_channel_t channels[2] = {ADC_CHANNEL_2, ADC_CHANNEL_5};
 adc_unit_t units[2] = {ADC_UNIT_1, ADC_UNIT_1};
 
-adc_continuous_handle_t adc_handle; // controlador per gestionar el mostreig analogic d'alta veolcitat amb DMA
+adc_continuous_handle_t adc_handle; 
 
 TaskHandle_t cb_task;
 TaskHandle_t SPI_Task;
@@ -167,8 +167,8 @@ float calculateRMS(float dades_RMS[])
         {
                 sum_squares += dades_RMS[i] * dades_RMS[i]; // Square
         }
-        float mean_squares = sum_squares / 450; // Mean
-        return sqrt(mean_squares);              // Root
+        float mean_squares = sum_squares / 450; 
+        return sqrt(mean_squares);             
 }
 
 float calculateMEAN(float dades_MEAN[])
@@ -178,8 +178,8 @@ float calculateMEAN(float dades_MEAN[])
         {
                 sum_squares += dades_MEAN[i]; // Square
         }
-        float mean_squares = sum_squares / 450; // Mean
-        return (mean_squares);                  // Root
+        float mean_squares = sum_squares / 450; 
+        return (mean_squares);                
 }
 
 float calculateMAV(float dades_MAV[])
@@ -188,7 +188,6 @@ float calculateMAV(float dades_MAV[])
 
         for (int i = 0; i < 450; i++)
         {
-                // Use fabs() for absolute value of doubles, abs() for integers
                 sum += fabs(dades_MAV[i]);
         }
 
@@ -201,7 +200,6 @@ float calculateWL(float dades_WL[])
 
         for (int i = 1; i < 450; i++)
         {
-                // Use fabs() for absolute value of doubles, abs() for integers
                 sum += fabs((dades_WL[i]) - dades_WL[i - 1]);
         }
 
@@ -215,7 +213,6 @@ float calculSSC(float dades_SSC[], float threshold)
 
         for (int i = 1; i < 450; i++)
         {
-                // Use fabs() for absolute value of doubles, abs() for integers
                 slope[i] = ((dades_SSC[i]) - dades_SSC[i - 1]);
         }
         for (int r = 1; r < 449; r++)
@@ -370,11 +367,6 @@ void SPI(void *pvParameters)
                 // printf("FINS AQUI OK 2 \n");
                 if (xQueueReceive(GlobalQueue, &frame, pdMS_TO_TICKS(100)) != pdTRUE)
                         continue;
-                /*static int64_t start_time = 0;
-                if (mostres_enviades == 0 && start_time == 0)
-                {
-                    start_time = esp_timer_get_time();
-                }*/
 
                 for (int i = 0; i < frame.len; i += SOC_ADC_DIGI_RESULT_BYTES)
                 {
