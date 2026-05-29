@@ -40,7 +40,7 @@ title('Comparativa de la variabilitat del RMS entre pacients');
 ylabel('Amplitud Normalitzada');
 
 figure;
-hold on; % Para dibujar todos en la misma ventana
+hold on; 
 plot(RMS_Roger, 'r', 'DisplayName', 'Reposo (0)');
 plot(RMS_Albert, 'g', 'DisplayName', 'Gesto 1');
 plot(RMS_Lluis, 'b', 'DisplayName', 'Gesto 2');
@@ -48,15 +48,14 @@ plot(RMS_Lluis, 'b', 'DisplayName', 'Gesto 2');
 title('Comparativa de RMS por Gesto');
 xlabel('Muestras');
 ylabel('Valor RMS');
-legend show; % Muestra qué color es cada gesto
+legend show; 
 grid on;
 hold off;
 
 figure;
 hold on; 
 
-% 'o' crea cercles, '.' crea punts petits, '*' crea estrelles
-% Pots ajustar la mida amb 'MarkerSize'
+
 plot(RMS_Roger, 'r.', 'MarkerSize', 10, 'DisplayName', 'Reposo (0)');
 plot(RMS_Albert, 'g.', 'MarkerSize', 10, 'DisplayName', 'Gesto 1');
 plot(RMS_Lluis, 'b.', 'MarkerSize', 10, 'DisplayName', 'Gesto 2');
