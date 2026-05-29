@@ -31,33 +31,19 @@ for i = 0:length(label)
 end
 %}
 
-
-
-
-% 1. Separem les dades per classes
 idxRepos = find(label == 0);
 idxGest1 = find(label == 1);
-idxGest2 = find(label == 2); % (O 3, segons el teu fitxer)
+idxGest2 = find(label == 2); 
 
-% 2. Triem 570 índexs aleatoris d'entre tots els que són "repos"
 n_mostres1 = R; %300 per el test 570 per el train
 n_mostres2 = R; 
 indicesAleatoris = randperm(length(idxRepos), n_mostres1);
 idxReposReduit = idxRepos(indicesAleatoris);
-
 indicesAleatoris2 = randperm(length(idxGest1), n_mostres2);
 idxGest1Reduit2 = idxGest1(indicesAleatoris2);
-
-% 3. Combinem els índexs: els 570 aleatoris de repos + tots els dels gestos
 nousIndex = [idxReposReduit; idxGest1Reduit2; idxGest2];
-
-% 4. Creem el nou dataset equilibrat
 datasetEquilibrat = data(nousIndex, :);
-
-% (Opcional) Barrejar-ho tot perquè no estiguin primer els 0, després els 1...
 datasetEquilibrat = datasetEquilibrat(randperm(size(datasetEquilibrat,1)), :);
-
-
 
 RMS = datasetEquilibrat(:,1);
 RMSD = datasetEquilibrat(:,2);
