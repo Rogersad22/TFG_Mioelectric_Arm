@@ -54,8 +54,6 @@ SSC = datasetEquilibrat(:,6);
 MCR = datasetEquilibrat(:,7);
 label = datasetEquilibrat(:,8);
 
-%}
-
 
 Num_repos = sum(label == 0);
 Num_gest1 = sum(label == 1);
